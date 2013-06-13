@@ -1,0 +1,18 @@
+#!/bin/sh -e
+# Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+REQUIRES='core'
+DESCRIPTION='VNC-based tabbed X11 install. Replaces X11 if specified first.'
+CHROOTBIN='croutonpowerd croutonxinitrc-wrapper xinit'
+CHROOTETC='xserverrc-vnc'
+# Prevent X11 from being added if it hasn't already.
+echo 'x11' >> "${TARGETDEDUPFILE:-/dev/null}"
+. "${TARGETSDIR:="$PWD"}/common"
+
+### Append to prepare.sh:
+XMETHOD=VNC
+
+install --minimal vnc4server dmz-cursor-theme xterm xfonts-base
+
+### append x11-common

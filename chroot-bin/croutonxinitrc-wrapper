@@ -49,6 +49,7 @@ croutonpowerd --daemon &
 # Launch appropriate daemons for the X11 method
 xmethod="`readlink -f '/etc/X11/xinit/xserverrc'`"
 xmethod="${xmethod##*-}"
+
 if [ -r "/etc/crouton/keylaunchrc-$xmethod" ]; then
     ln -sfT "/etc/crouton/keylaunchrc-$xmethod" "$HOME/.keylaunchrc"
     keylaunch &
@@ -67,9 +68,18 @@ if [ -r "/etc/crouton/keylaunchrc-$xmethod" ]; then
         fi
     fi
 fi
+
 # Pass through the host cursor on xephyr
 if [ "$xmethod" = 'xephyr' ]; then
     host-x11 croutoncursor "$DISPLAY" &
+fi
+
+# Spit out the VNC link
+if [ "$xmethod" = 'vnc' ]; then
+    echo "
+VNC server launched on display ${DISPLAY%%.*}
+chrome-extension://iabmpiboiopbgfabjmgeedhcmjenhbla/index.html#address=localhost:${DISPLAY%%.*}
+" 1>&2
 fi
 
 # Launch touchegg if it is requested.
