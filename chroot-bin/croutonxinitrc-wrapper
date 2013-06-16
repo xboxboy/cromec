@@ -76,9 +76,11 @@ fi
 
 # Spit out the VNC link
 if [ "$xmethod" = 'vnc' ]; then
+    vncdisp="${DISPLAY%%.*}"
+    vncdisp="${vncdisp#":"}"
     echo "
-VNC server launched on display ${DISPLAY%%.*}
-chrome-extension://iabmpiboiopbgfabjmgeedhcmjenhbla/index.html#address=localhost:${DISPLAY%%.*}
+VNC server launched on display :$vncdisp
+chrome-extension://iabmpiboiopbgfabjmgeedhcmjenhbla/index.html#address=localhost:$vncdisp
 " 1>&2
 fi
 

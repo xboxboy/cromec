@@ -11,7 +11,7 @@ echo 'x11' >> "${TARGETDEDUPFILE:-/dev/null}"
 . "${TARGETSDIR:="$PWD"}/common"
 
 ### Append to prepare.sh:
-XMETHOD=VNC
+XMETHOD=vnc
 
 install --minimal vnc4server dmz-cursor-theme xterm xfonts-base
 
