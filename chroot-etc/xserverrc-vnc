@@ -3,5 +3,5 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-exec /usr/bin/Xvnc -DeferUpdate 10 -NeverShared -SecurityTypes none \
-                   -IdleTimeout 0 -localhost -once "$@"
+exec /usr/bin/Xvnc -nevershared -dontdisconnect -localhost -once \
+                   -geometry 1024x768 -depth 16 "$@"

@@ -13,6 +13,6 @@ echo 'x11' >> "${TARGETDEDUPFILE:-/dev/null}"
 ### Append to prepare.sh:
 XMETHOD=vnc
 
-install --minimal vnc4server dmz-cursor-theme xterm xfonts-base
+install --minimal tightvncserver dmz-cursor-theme xterm xfonts-base xinit
 
 ### append x11-common
