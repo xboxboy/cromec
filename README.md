@@ -1,3 +1,30 @@
+cromec
+======
+
+cromec is a fork of [crouton](https://github.com/dnschneid/crouton) that allows 
+you to run another Linux distribution side by side with Chromium OS.
+
+cromec (ChRomium Os Mageia Environment Chroot) is a development test bed where 
+the Mageia Linux distribution is to be installed in a chroot environment.
+
+At the present time there is no official ARM port of Mageia to suit the Samsung
+S3 Chromebook (A.K.A. The ARM one).
+
+Given this please understand things will break, fail and be less than pleasant
+at times. Please file bug reports: It is the only way things can be fixed!
+
+*cromec has no official link with Mageia.org at this present time.
+
+At this early stage NO bootstrap exists for cromec, hence no end use of cromec.
+The /installer/mageia directory is currently a modified version of
+/installer/ubuntu from crouton.
+
+creating the a Mageia bootstrap for x86 that will work from the Chromebook
+development mode is the first task.
+
+Original Documentation of crouton follows:
+
+
 crouton: Chromium OS Universal Chroot Environment
 =================================================
 

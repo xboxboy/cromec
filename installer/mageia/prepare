@@ -1,0 +1,149 @@
+#!/bin/sh -e
+# Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This is a distro-specific continuation of the prepare.sh script.
+
+PKGEXT='deb'
+DISTROAKA='debian'
+
+
+# install_dist: see install() in prepare.sh for details.
+install_dist() {
+    local pkgs='' pkgsasdeps='' params='' asdeps=''
+    while [ ! "$#" = 0 ]; do
+        if [ "$1" = "--minimal" ]; then
+            params='--no-install-recommends'
+        elif [ "$1" = "--asdeps" ]; then
+            asdeps='y'
+        else
+            break
+        fi
+        shift
+    done
+    while [ ! "$#" = 0 ]; do
+        if [ "$1" = '--' ]; then
+            shift
+            break
+        fi
+        pkgs="$pkgs $1"
+        shift
+    done
+    if [ -n "$asdeps" ]; then
+        pkgsasdeps="`list_uninstalled_dist '' $pkgs`"
+    fi
+    apt-get -y $params install $pkgs `list_uninstalled_dist - "$@"`
+    if [ -n "$pkgsasdeps" ]; then
+        apt-mark auto $pkgsasdeps
+    fi
+}
+
+
+# install_pkg_dist: see install_pkg() in prepare.sh for details.
+install_pkg_dist() {
+    local params=''
+    if [ "$1" = '--minimal' ]; then
+        params='--no-install-recommends'
+        shift
+    fi
+    if [ ! "$#" = 0 ]; then
+        dpkg --force-depends -i "$@"
+    fi
+    apt-get -fy $params install
+}
+
+
+# remove_dist: see remove() in prepare.sh for details.
+remove_dist() {
+    apt-get -y --purge remove "$@"
+}
+
+
+# list_uninstalled_dist: see list_uninstalled() in prepare.sh for details.
+# If the package is virtual (e.g. libc-dev), we need to find the binary package
+# corresponding to it (e.g. libc6-dev), so that we can remove it afterwards
+# ("apt-get remove libc-dev" does not remove libc6-dev).
+list_uninstalled_dist() {
+    local suffix="$1" pkg
+    shift
+    for pkg in "$@"; do
+        # If $pkg is a binary package, apt-cache returns the package name
+        # itself, so $pkg value stays the same.
+        # If $pkg is a virtual package, it returns a list of binary packages
+        # that are able to provide it. If there is a single match, use that.
+        # If there is no match, it may mean that we are checking for a package
+        # that we installed manually from a .deb file, so we still use $pkg.
+        # If there is more than one match, we use $pkg, and apt-get install
+        # will fail due to selection ambiguity (it is not the purpose of this
+        # function to pick one of the alternative).
+        pkg="`apt-cache search --names-only "^$pkg\$" |
+                  awk 'x{x=""; exit} !x{x=$1} END{print x?x:"'"$pkg"'"}'`"
+        if ! dpkg-query -l "$pkg" 2>/dev/null | grep -q '^[ih]'; then
+            echo -n "$pkg$suffix "
+        fi
+    done
+}
+
+
+# install_mirror_package: Fetch and install a package directly from the mirror.
+# This allows to install a package from a different release, when the current
+# release does not provide the required package, or when the version it
+# provides is broken or outdated.
+# $1: Package name (e.g. xserver-xephyr)
+# $2: Mirror path (e.g. pool/universe/x/xorg-server)
+# $3: Version regex (e.g. '1\.11\.4-0ubuntu[0-9][0-9]\.[0-9]*').
+#     If not specified, match any version (default regex: ".*").
+#     The latest version that matches the regex is selected.
+install_mirror_package() {
+    install wget
+    local package="$1"
+    # Detect mirror: Find the first source that provides the "main" component
+    local mirror="`sed -n 's/^deb \([^ ]*\) [^ ]* \(.* \)*main\( .*\)*$/\1/p' \
+        /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null \
+        | head -n 1`"
+    if [ -z "$mirror" ]; then
+        error 1 "Cannot detect mirror."
+    fi
+    local url="${mirror%/}/${2#/}/"
+    local regex="^${package}_${3:-.*}_${ARCH}\.deb$"
+    # Find package in directory listing:
+    # Filenames are HTML <a href> values, enclosed in quotes.
+    local xvers="`wget -O- "$url" -nv \
+        | awk 'BEGIN { RS="<[aA][^>]* [hH][rR][eE][fF]=\\""; FS="\\"" }
+               NR > 1 && $1 ~ /'"$regex"'/ { print $1 }' \
+        | sort -V | tail -n 1`"
+    if [ -z "$xvers" ]; then
+        error 1 "Error retrieving $package."
+    fi
+    url="$url$xvers"
+    # Download the package to a temporary file
+    local deb="`mktemp crouton.XXXXXX --tmpdir=/tmp`"
+    addtrap "rm -f '$deb' 2>/dev/null"
+    wget --no-check-certificate "$url" -O"$deb"
+    # Install the package
+    install_pkg "$deb"
+}
+
+# Run debootstrap second stage if it hasn't already happened
+if [ -r /debootstrap ]; then
+    # Debootstrap doesn't like anything mounted under /sys or /var when it runs
+    # We request a re-mount after bootstrapping, so these mounts will be fixed.
+    # We also can't detect the mounts properly due to the chroot, so we have to
+    # hardcode the mounts.
+    umount '/sys/fs/fuse/connections' '/var/run/lock' '/var/run'
+    # Start the bootstrap
+    /debootstrap/debootstrap --second-stage
+    # Fix the keyboard mode in case it got reverted to raw
+    fixkeyboardmode
+    # Clean contents of /var/run (since we'll always be mounting over it).
+    rm -rf /var/run/*
+    # Request a script restart to refresh the mount environment
+    relaunch_setup
+else
+    # Do any pending configuration, in case of an unfortunately-timed Ctrl-C
+    dpkg --configure -a
+
+    # Fix the keyboard mode in case it got reverted to raw
+    fixkeyboardmode
+fi
