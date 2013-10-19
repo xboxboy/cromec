@@ -22,9 +22,17 @@ gunzip -fdS.cz synthesis.hdlist.cz
 
 awk -F "@" '/@info@/ { print $3 }' synthesis.hdlist > rpmlist.txt
 
-# Get list of required rpm's for chroot environment: From github
+# From github 3 scripts required: list of required rpms, rpm2cpio bash script, cpio bash script
+# Get list of required rpm's for chroot environment: 
 
 wget https://raw.github.com/xboxboy/cromec/master/installer/mageia/mageia3_rpms_req.txt
+wget https://raw.github.com/xboxboy/cromec/master/installer/mageia/bash_rpm_cpio.sh
+wget https://raw.github.com/xboxboy/cromec/master/installer/mageia/bash_cpio.sh
+
+# Make bash scripts executable
+
+chmod 555 bash_rpm_cpio.sh
+chmod 555 bash_cpio.sh
 
 # Determine rpm full name and version and gather rpms for environment: Only supports X86_64 at present: arch detection and response to be added!
 
@@ -34,3 +42,11 @@ do
   echo $wgetvar
   wget --spider http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/${wgetvar}
 done
+
+#Test download filesystem rpm for extraction: Manually
+
+wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/filesystem-2.1.9-20.mga3.x86_64.rpm
+
+#filesystem* rpm must be extracted first, or bootstrap filesystem will not suit rpm (package manager)
+
+# ./bash_rpm_cpio.sh filesystem-2.1.9-20.mga3.x86_64.rpm | ./bash_cpio.sh -idm     # Unable to extract 
