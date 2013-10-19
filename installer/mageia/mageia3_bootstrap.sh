@@ -49,4 +49,4 @@ wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/fil
 
 #filesystem* rpm must be extracted first, or bootstrap filesystem will not suit rpm (package manager)
 
-# ./bash_rpm_cpio.sh filesystem-2.1.9-20.mga3.x86_64.rpm | ./bash_cpio.sh -idm     # Unable to extract 
+# ./bash_rpm_cpio.sh filesystem-2.1.9-20.mga3.x86_64.rpm | ./bash_cpio.sh -idm     # Needs to be run as root!
