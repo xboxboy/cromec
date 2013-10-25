@@ -6,7 +6,7 @@
 # - block/character devices
 # - cpio does not erase existing files by default
  
-set -e
+set -e 
  
 DEBUG=''
  
@@ -19,7 +19,7 @@ EXTRACT=''
 VERBOSE=''
 MAKEDIR=''
 PRESERVEMTIME=''
-while getopts dimv: name
+while getopts dimv name
 do
 case $name in
 d) MAKEDIR='y';;
