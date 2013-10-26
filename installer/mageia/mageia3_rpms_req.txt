@@ -57,6 +57,7 @@ lib64uuid1
 lib64xml2_2
 lib64zlib1
 libgcc1
+locales-en
 lua
 mageia-release-common
 meta-task
