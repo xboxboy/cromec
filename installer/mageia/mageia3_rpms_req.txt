@@ -76,6 +76,7 @@ perl-Config-IniFiles
 perl-List-MoreUtils
 perl-Locale-gettext
 perl-MDV-Distribconf
+perl-Time-ZoneInfo
 perl-URPM
 procps
 psmisc
