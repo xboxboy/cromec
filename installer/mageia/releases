@@ -1,6 +1,6 @@
-# Need to Set as Mageia 1,2,3 for x86 and mageia 1 preview port for ARM
+# Only Stable releases are supported for X86: Mageia is only available in a mageia1 preview port for ARM architecture
 
-1
-2
-3
+mageia1
+mageia2
+mageia3
 
