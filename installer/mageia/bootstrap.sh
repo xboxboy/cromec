@@ -37,16 +37,14 @@ wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/med
 echo 'Decompressing synthesis.hdlist.cz'
 gunzip -fdS.cz synthesis.hdlist.cz
 # Create readable list of all package names: Saved as rpmlist.txt
-echo 'Creating package list'
+echo 'Creating list of packages on mirror in /release'
 awk -F "@" '/@info@/ { print $3 }' synthesis.hdlist > rpmlist.txt
-# From github 3 scripts required: list of required rpms, rpm2cpio bash script, cpio bash script
-# When compressed as tarball, links to be removed: Files will be in tarball
-echo 'downloading list of packages required for bootstrap'
-wget https://raw.github.com/xboxboy/cromec/master/installer/mageia/mageia3_rpms_req.txt
-echo 'downloading bash implementation of rpm2cpio script'
-wget https://raw.github.com/xboxboy/cromec/master/installer/mageia/bash_rpm_cpio.sh
-echo 'downloading bash implementation of cpio'
-wget https://raw.github.com/xboxboy/cromec/master/installer/mageia/bash_cpio.sh
+
+# Add the necessary debootstrap executables and packages required list
+newpath="$PATH:$tmp"
+cp "$INSTALLERDIR/$DISTRO/bash_rpm_cpio.sh" "$INSTALLERDIR/$DISTRO/bash_cpio.sh" "$INSTALLERDIR/$DISTRO/mageia3_rpms_req.txt" "$tmp/"
+chmod 755 "$tmp/bash_rpm_cpio" "$tmp/bash_cpio.sh"
+
 # Determine packages full names including version and gather rpms for environment: Only supports X86_64 at present:
 echo 'Downloading packages required for bootstrap'
 for name in $(< /chroottest/mageia3_rpms_req.txt);
@@ -61,25 +59,5 @@ echo 'creating Mageia ready filesystem'
 # Create /dev in chroot
 mkdir /chroottest/dev
 # extraction of packages from host system into intended chroot environment
+echo 'Extracting packages into Chroot file system'
 find . -type f -name "*".rpm | xargs -n1 -ifile sh -c "./bash_rpm_cpio.sh file | ./bash_cpio.sh -idv"
-
-
-
-
-
-
-
-# Add the necessary debootstrap executables
-#newpath="$PATH:$tmp"
-#cp "$INSTALLERDIR/$DISTRO/ar" "$INSTALLERDIR/$DISTRO/pkgdetails" "$tmp/"
-#chmod 755 "$tmp/ar" "$tmp/pkgdetails"
-
-# debootstrap wants a file to initialize /dev with, but we don't actually
-# want any files there. Create an empty tarball that it can extract.
-#tar -czf "$tmp/devices.tar.gz" -T /dev/null
-
-# Grab the release and drop it into the subdirectory
-#echo 'Downloading bootstrap files...' 1>&2
-#PATH="$newpath" DEBOOTSTRAP_DIR="$tmp" $FAKEROOT \
-    "$tmp/debootstrap" --foreign --arch="$ARCH" "$RELEASE" \
-                       "$tmp/$subdir" "$MIRROR" 1>&2
