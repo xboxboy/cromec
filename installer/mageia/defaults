@@ -12,10 +12,11 @@ fi
 
 if [ -z "$MIRROR" ]; then
     if [ "$ARCH" = 'x86_64' -o "$ARCH" = 'i586' ]; then
-        MIRROR='http://ftp.aarnet.edu.au/pub/mageia/'
+        MIRROR='http://ftp.aarnet.edu.au/pub/mageia/distrib/${RELEASE#mageia}/x86_64/media/core/release/'
+       # eg http://mirror.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/
     else
-        MIRROR='http://packages.rtp-net.org/mageia/1/armv5tl/'
-
+        MIRROR='http://packages.rtp-net.org/mageia/${RELEASE#mageia}/armv5tl/media/core/release/'
+        # eg http://packages.rtp-net.org/mageia/1/armv5tl/media/core/release/
         fi
 fi
 
