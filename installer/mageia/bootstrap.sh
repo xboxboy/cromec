@@ -49,7 +49,7 @@ chmod 755 "$tmp/bash_rpm_cpio" "$tmp/bash_cpio.sh"
 
 # Determine packages full names including version: Then gather packages for chroot environment
 echo 'Downloading packages required for bootstrap'
-for name in $(< $INSTALLERDIR/$DISTRO/mageia3_rpms_req.txt);
+for name in $(< $tmp/mageia3_rpms_req.txt);
 do
   wgetvar=$(grep "^$name-[0-9]" /$tmp/mirrorrpmlist.txt;)
   echo 'Package name and version :' $wgetvar
@@ -57,7 +57,7 @@ do
   wget $MIRROR/${wgetvar} -P $tmp "$name.rpm"
 done
 
-#filesystem* rpm must be extracted first, or bootstrap filesystem will not suit rpm (package manager): Must be run from $tmp directory
+#filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit RPM (package manager): Must be run from $tmp directory
 echo 'creating Mageia ready filesystem'
 ./bash_rpm_cpio.sh filesystem.rpm | ./bash_cpio.sh -idmv
 
