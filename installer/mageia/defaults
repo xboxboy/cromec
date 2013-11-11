@@ -7,7 +7,7 @@
 # It must set at least ARCH and MIRROR if not already specified.
 
 if [ -z "$ARCH" ]; then
-    ARCH="`uname -m | sed -e 's i.86 i386 ;s x86_64 amd64 ;s arm.* armhf ;'`"
+    ARCH="`uname -m | sed -e 's i.86 i586 ;s x86_64 ;s arm.* armhf ;'`"
 fi
 
 if [ -z "$MIRROR" ]; then
@@ -15,7 +15,7 @@ if [ -z "$MIRROR" ]; then
         MIRROR='http://ftp.aarnet.edu.au/pub/mageia/distrib/${RELEASE#mageia}/x86_64/media/core/release/'
        # eg http://mirror.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/
     else
-        MIRROR='http://packages.rtp-net.org/mageia/${RELEASE#mageia}/armv5tl/media/core/release/'
+        MIRROR="http://packages.rtp-net.org/mageia/${RELEASE#mageia}/armv5tl/media/core/release/"
         # eg http://packages.rtp-net.org/mageia/1/armv5tl/media/core/release/
         fi
 fi
