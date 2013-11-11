@@ -32,18 +32,23 @@
 
 # Grab latest package listings: 
 echo 'Downloading mirror package listing: synthesis.hdlist.cz'
-wget -O $tmp/synthesis.hdlist.cz $MIRROR/media_info/synthesis.hdlist.cz
-# eg: wget -O $tmp/synthesis.hdlist.cz http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/media_info/synthesis.hdlist.cz 
+wget $MIRROR/media_info/synthesis.hdlist.cz -O $tmp/synthesis.hdlist.cz
+# eg: wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/media_info/synthesis.hdlist.cz  -O $tmp/synthesis.hdlist.cz
+
+#Make sure we are in $tmp
+ch $tmp
 
 # Decompress package listing: 
 echo 'Decompressing synthesis.hdlist.cz' 
 gunzip -dvS.cz synthesis.hdlist.cz
 # Create readable list of all package names: Saved as mirrorrpmlist.txt
 echo 'Creating list of packages on mirror in /release'
-awk -F "@" '/@info@/ { print $3 }' synthesis.hdlist > $tmp/mirrorrpmlist.txt
+awk -F "@" '/@info@/ { print $3 }' $tmp/synthesis.hdlist > $tmp/mirrorrpmlist.txt
+
+#Add path so scripts in $tmp can be called without full path name
+newpath="$PATH:$tmp"
 
 # Add the necessary debootstrap executables and packages required list
-newpath="$PATH:$tmp"
 cp "$INSTALLERDIR/$DISTRO/bash_rpm_cpio.sh" "$INSTALLERDIR/$DISTRO/bash_cpio.sh" "$INSTALLERDIR/$DISTRO/mageia3_rpms_req.txt" "$tmp/"
 chmod 755 "$tmp/bash_rpm_cpio" "$tmp/bash_cpio.sh"
 
@@ -57,13 +62,16 @@ do
   wget $MIRROR/${wgetvar} -P $tmp "$name.rpm"
 done
 
-#filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit RPM (package manager): Must be run from $tmp directory
-echo 'creating Mageia ready filesystem'
-./bash_rpm_cpio.sh filesystem.rpm | ./bash_cpio.sh -idmv
+#All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
+cd $tmp/$subdir
 
-# Create /dev in chroot
+#filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit the RPM package manager
+echo 'creating Mageia ready filesystem'
+bash_rpm_cpio.sh $tmp/filesystem.rpm | bash_cpio.sh -idmv
+
+# /dev is not created by filesystem.rpm: create /dev manually
 mkdir /$tmp/$subdir/dev
 
-# extraction of packages from host system into intended chroot environment: Must be run from $tmp directory
-echo 'Extracting packages into Chroot file system'
-find . -type f -name "*".rpm | xargs -n1 -ifile sh -c "./bash_rpm_cpio.sh file | ./bash_cpio.sh -idv"
+# extraction of packages into chroot filesystem:
+echo 'Extracting packages into created file system'
+find . -type f -name $tmp/"*".rpm | xargs -n1 -ifile sh -c "bash_rpm_cpio.sh file | bash_cpio.sh -idv"
