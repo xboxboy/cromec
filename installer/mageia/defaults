@@ -7,7 +7,7 @@
 # It must set at least ARCH and MIRROR if not already specified.
 
 if [ -z "$ARCH" ]; then
-    ARCH="`uname -m | sed -e 's i.86 i586 ;s x86_64 ;s arm.* armhf ;'`"
+    ARCH="`uname -m | sed -e 's i.86 i386 ;s x86_64 amd64 ;s arm.* armhf ;'`"
 fi
 
 if [ -z "$MIRROR" ]; then
