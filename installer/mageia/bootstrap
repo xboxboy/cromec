@@ -57,7 +57,7 @@ do
   wgetvar=$(grep "^$name-[0-9]" $tmp/mirrorrpmlist.txt;)
   echo 'Package name and version :' $wgetvar
   echo 'Downloading package'
-  wget $MIRROR/../${wgetvar} -P $tmp "$name.rpm"
+  wget $MIRROR/../${wgetvar} -P $tmp
 done < $tmp/mageia3_rpms_req.txt
 
 #All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
