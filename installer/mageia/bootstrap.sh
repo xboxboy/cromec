@@ -36,7 +36,7 @@ wget $MIRROR/media_info/synthesis.hdlist.cz -O $tmp/synthesis.hdlist.cz
 # eg: wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/media_info/synthesis.hdlist.cz  -O $tmp/synthesis.hdlist.cz
 
 #Make sure we are in $tmp
-ch $tmp
+cd $tmp
 
 # Decompress package listing: 
 echo 'Decompressing synthesis.hdlist.cz' 
@@ -56,7 +56,7 @@ chmod 755 "$tmp/bash_rpm_cpio" "$tmp/bash_cpio.sh"
 echo 'Downloading packages required for bootstrap'
 for name in $(< $tmp/mageia3_rpms_req.txt);
 do
-  wgetvar=$(grep "^$name-[0-9]" /$tmp/mirrorrpmlist.txt;)
+  wgetvar=$(grep "^$name-[0-9]" $tmp/mirrorrpmlist.txt;)
   echo 'Package name and version :' $wgetvar
   echo 'Downloading package'
   wget $MIRROR/${wgetvar} -P $tmp "$name.rpm"
