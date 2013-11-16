@@ -35,12 +35,10 @@ echo 'Downloading mirror package listing: synthesis.hdlist.cz'
 wget $MIRROR/media_info/synthesis.hdlist.cz -O $tmp/synthesis.hdlist.cz
 # eg: wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/media_info/synthesis.hdlist.cz  -O $tmp/synthesis.hdlist.cz
 
-#Make sure we are in $tmp
-cd $tmp
-
 # Decompress package listing: 
 echo 'Decompressing synthesis.hdlist.cz' 
-gunzip -dvS.cz synthesis.hdlist.cz
+gunzip -dvS.cz $tmp/synthesis.hdlist.cz > $tmp/synthesis.hdlist
+
 # Create readable list of all package names: Saved as mirrorrpmlist.txt
 echo 'Creating list of packages on mirror in /release'
 awk -F "@" '/@info@/ { print $3 }' $tmp/synthesis.hdlist > $tmp/mirrorrpmlist.txt
