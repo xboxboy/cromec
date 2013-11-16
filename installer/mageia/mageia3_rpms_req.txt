@@ -27,7 +27,7 @@ lib64bzip2_1|libbzip2_1
 lib64cap2|libcap2
 lib64curl4|libcurl4
 lib64db4.8|libdb4.8
-lib64db5.3|libdb5.3
+lib64db5.3|libdb5.1
 lib64elfutils1|libelfutils1
 lib64ext2fs2|libext2fs2
 lib64gcrypt11|libgcrypt11
@@ -47,7 +47,7 @@ lib64openssl1.0.0|libopenssl1.0.0
 lib64popt0|libpopt0
 lib64readline6|libreadline6
 lib64rpm3|librpm1
-lib64rpmbuild3|librpmbuild1
+lib64rpmbuild3
 lib64sasl2|libsasl2
 lib64sqlite3_0|libsqlite3_0
 lib64ssh2_1|libssh2_1
