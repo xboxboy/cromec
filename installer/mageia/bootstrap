@@ -37,7 +37,7 @@ wget $MIRROR/media_info/synthesis.hdlist.cz -O $tmp/synthesis.hdlist.cz
 
 # Decompress package listing: 
 echo 'Decompressing synthesis.hdlist.cz' 
-gunzip -dvS.cz $tmp/synthesis.hdlist.cz > $tmp/synthesis.hdlist
+gunzip -dvS.cz $tmp/synthesis.hdlist.cz > $tmp
 
 # Create readable list of all package names: Saved as mirrorrpmlist.txt
 echo 'Creating list of packages on mirror in /release'
