@@ -48,7 +48,7 @@ newpath="$PATH:$tmp"
 
 # Add the necessary debootstrap executables and packages required list
 cp "$INSTALLERDIR/$DISTRO/bash_rpm_cpio.sh" "$INSTALLERDIR/$DISTRO/bash_cpio.sh" "$INSTALLERDIR/$DISTRO/mageia3_rpms_req.txt" "$tmp/"
-chmod 755 "$tmp/bash_rpm_cpio" "$tmp/bash_cpio.sh"
+chmod 755 "$tmp/bash_rpm_cpio.sh" "$tmp/bash_cpio.sh"
 
 # Determine packages full names including version: Then gather packages for chroot environment
 echo 'Downloading packages required for bootstrap'
