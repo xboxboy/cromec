@@ -22,7 +22,7 @@ initscripts
 iputils
 lib64acl1|libacl1
 lib64attr1|libattr1
-lib64blkid1|liblkid1
+lib64blkid1|libblkid1
 lib64bzip2_1|libbzip2_1
 lib64cap2|libcap2
 lib64curl4|libcurl4
