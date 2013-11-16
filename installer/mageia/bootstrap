@@ -41,7 +41,7 @@ gunzip -dvS.cz $tmp/synthesis.hdlist.cz
 
 # Create readable list of all package names: Saved as mirrorrpmlist.txt
 echo 'Creating list of packages on mirror in /release'
-awk -F "@" '/@info@/ { print $3 }' $tmp/synthesis.hdlist # > $tmp/mirrorrpmlist.txt
+awk -F "@" '/@info@/ { print $3 }' $tmp/synthesis.hdlist > $tmp/mirrorrpmlist.txt
 
 #Add path so scripts in $tmp can be called without full path name
 newpath="$PATH:$tmp"
@@ -52,7 +52,7 @@ chmod 755 "$tmp/bash_rpm_cpio.sh" "$tmp/bash_cpio.sh"
 
 # Determine packages full names including version: Then gather packages for chroot environment
 echo 'Downloading packages required for bootstrap'
-for name in $(< $tmp/mageia3_rpms_req.txt);
+for name in $(< $tmp/mageia3_rpms_req.txt );
 do
   wgetvar=$(grep "^$name-[0-9]" $tmp/mirrorrpmlist.txt;)
   echo 'Package name and version :' $wgetvar
