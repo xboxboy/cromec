@@ -52,7 +52,7 @@ chmod 755 "$tmp/bash_rpm_cpio.sh" "$tmp/bash_cpio.sh"
 
 # Determine packages full names including version: Then gather packages for chroot environment
 echo 'Downloading packages required for bootstrap'
-for name in $tmp/mageia3_rpms_req.txt;
+while read name $tmp/mageia3_rpms_req.txt;
 do
   wgetvar=$(grep "^$name-[0-9]" $tmp/mirrorrpmlist.txt;)
   echo 'Package name and version :' $wgetvar
