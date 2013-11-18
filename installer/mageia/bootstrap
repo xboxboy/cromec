@@ -55,9 +55,10 @@ echo 'Downloading packages required for bootstrap'
 while read -r name;
 do
   wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt;)
-  if "$wgetvar"=null; then
+  if "$wgetvar"=null
+  then
   echo '"$wgetvar" required only for x86: Not attempting download'
-  else; 
+  else 
   echo 'Package name and version :' "$wgetvar"
   echo 'Downloading package'
   wget "$MIRROR/../${wgetvar}.rpm" -P "$tmp"
