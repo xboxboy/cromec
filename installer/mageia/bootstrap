@@ -54,7 +54,7 @@ chmod 755 "$tmp/bash_rpm_cpio.sh" "$tmp/bash_cpio.sh"
 echo 'Downloading packages required for bootstrap'
 while read -r name;
 do
-  printf 'Pattern: %q\nPackage name and version: %q\n' "$name" "$wgetvar"
+#  printf 'Pattern: %q\nPackage name and version: %q\n' "$name" "$wgetvar"
   if wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt); then
   wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
   # if [[ $wgetvar ]]
