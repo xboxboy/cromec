@@ -56,7 +56,7 @@ while read -r name;
 do
   wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt;)
   if [[ $wgetvar ]];then
-  wget "$MIRROR"/"$wgetvar".rpm" -P "$tmp"
+  wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
   fi
   #if [[-z "$wgetvar" ]]
   #then
