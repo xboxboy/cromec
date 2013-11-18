@@ -72,6 +72,7 @@ done < "$tmp"/mageia3_rpms_req.txt
 
 #Announce all packages downloaded
 Echo 'All packages on local system for simple chroot'
+ls *.rpm
 
 #All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
 cd "$tmp/$subdir"
