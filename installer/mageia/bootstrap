@@ -55,17 +55,18 @@ echo 'Downloading packages required for bootstrap'
 while read -r name;
 do
   printf 'Pattern: %q\nPackage name and version: %q\n' "$name" "$wgetvar"
-  wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt;)
+  if wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt); then
+  wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
   # if [[ $wgetvar ]]
   # then
   # wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
   # fi
-  if [[ "$wgetvar" ==  ]]; then
-  echo 'This package required only for x86: Not attempting download'
-  else 
-  echo 'Package name and version :' "$wgetvar"
-  echo 'Downloading package'
-  wget "$MIRROR/../${wgetvar}.rpm" -P "$tmp"
+  #if [[ "$wgetvar" ==  ]]; then
+  #echo 'This package required only for x86: Not attempting download'
+  #else 
+  #echo 'Package name and version :' "$wgetvar"
+  #echo 'Downloading package'
+  #wget "$MIRROR/../${wgetvar}.rpm" -P "$tmp"
   fi
 done < "$tmp"/mageia3_rpms_req.txt
 
