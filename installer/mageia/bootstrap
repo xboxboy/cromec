@@ -55,9 +55,13 @@ echo 'Downloading packages required for bootstrap'
 while read -r name;
 do
   wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt;)
+  if "$wgetvar"=null; then
+  echo '"$wgetvar" required only for x86: Not attempting download'
+  else; 
   echo 'Package name and version :' "$wgetvar"
   echo 'Downloading package'
   wget "$MIRROR/../${wgetvar}.rpm" -P "$tmp"
+  fi
 done < "$tmp"/mageia3_rpms_req.txt
 
 #All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
