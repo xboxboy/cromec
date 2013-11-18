@@ -59,7 +59,7 @@ do
   # then
   # wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
   # fi
-  if [[-z "$wgetvar" ]]; then
+  if [[ "$wgetvar" == "" ]]; then
   echo 'This package required only for x86: Not attempting download'
   else 
   echo 'Package name and version :' "$wgetvar"
