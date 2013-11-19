@@ -82,7 +82,7 @@ cd "$tmp/$subdir"
 
 #filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit the RPM package manager
 echo 'creating Mageia ready filesystem'
-bash_rpm_cpio.sh "$tmp"/filesystem.rpm | bash_cpio.sh -idmv
+"$tmp"/bash_rpm_cpio.sh "$tmp"/filesystem.rpm | "$tmp"/bash_cpio.sh -idmv
 
 # /dev is not created by filesystem.rpm: create /dev manually
 mkdir "$tmp/$subdir"/dev
