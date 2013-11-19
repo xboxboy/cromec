@@ -84,9 +84,9 @@ echo 'creating Mageia ready filesystem'
 bash_rpm_cpio.sh "$tmp"/filesystem.rpm | bash_cpio.sh -idmv
 
 # /dev is not created by filesystem.rpm: create /dev manually
-mkdir /"$tmp/$subdir"/dev
+mkdir "$tmp/$subdir"/dev
 
 # extraction of packages into chroot filesystem:
 echo 'Extracting packages into created file system'
-find . -type f -name "$tmp"/"*".rpm | xargs -n1 -ifile sh -c "bash_rpm_cpio.sh file | bash_cpio.sh -idv"
+find . -type f -name "$tmp"/*.rpm | xargs -n1 -ifile sh -c "bash_rpm_cpio.sh file | bash_cpio.sh -idv"
 )
