@@ -71,7 +71,7 @@ do
 done < "$tmp"/mageia3_rpms_req.txt
 
 #Announce all packages downloaded
-Echo 'All packages on local system for simple chroot'
+echo 'All packages on local system for simple chroot'
 ls "$tmp"/"*".rpm
 
 (
