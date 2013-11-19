@@ -56,7 +56,7 @@ while read -r name;
 do
 #  printf 'Pattern: %q\nPackage name and version: %q\n' "$name" "$wgetvar"
   if wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt); then
-  wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
+  wget "$MIRROR"/"$wgetvar".rpm -O "$tmp"/"$wgetvar".rpm
   # if [[ $wgetvar ]]
   # then
   # wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
