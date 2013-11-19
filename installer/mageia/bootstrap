@@ -77,6 +77,7 @@ ls "$tmp"/*.rpm
 (
 # Now in sub shell
 # All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
+mkdir -p "$tmp"/"$subdir"
 cd "$tmp/$subdir"
 
 #filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit the RPM package manager
