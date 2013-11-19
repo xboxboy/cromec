@@ -74,16 +74,19 @@ done < "$tmp"/mageia3_rpms_req.txt
 Echo 'All packages on local system for simple chroot'
 ls "$tmp"/"*".rpm
 
-#All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
-#cd "$tmp/$subdir"
+(
+# Now in sub shell
+# All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
+cd "$tmp/$subdir"
 
 #filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit the RPM package manager
-#echo 'creating Mageia ready filesystem'
-#bash_rpm_cpio.sh "$tmp"/filesystem.rpm | bash_cpio.sh -idmv
+echo 'creating Mageia ready filesystem'
+bash_rpm_cpio.sh "$tmp"/filesystem.rpm | bash_cpio.sh -idmv
 
 # /dev is not created by filesystem.rpm: create /dev manually
-#mkdir /"$tmp/$subdir"/dev
+mkdir /"$tmp/$subdir"/dev
 
 # extraction of packages into chroot filesystem:
-#echo 'Extracting packages into created file system'
-#find . -type f -name "$tmp"/"*".rpm | xargs -n1 -ifile sh -c "bash_rpm_cpio.sh file | bash_cpio.sh -idv"
+echo 'Extracting packages into created file system'
+find . -type f -name "$tmp"/"*".rpm | xargs -n1 -ifile sh -c "bash_rpm_cpio.sh file | bash_cpio.sh -idv"
+)
