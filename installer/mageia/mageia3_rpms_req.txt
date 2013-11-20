@@ -44,6 +44,7 @@ lib64ncursesw5|libncursesw5
 lib64nspr4|libnspr4
 lib64nss3|libnss3
 lib64openssl1.0.0|libopenssl1.0.0
+libpam0
 lib64popt0|libpopt0
 lib64readline6|libreadline6
 lib64rpm3|librpm1
