@@ -56,7 +56,7 @@ while read -r name;
 do
 #  printf 'Pattern: %q\nPackage name and version: %q\n' "$name" "$wgetvar"
   if wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt); then
-  wget "$MIRROR"/"$wgetvar".rpm -O "$tmp"/"$name".rpm
+  wget "$MIRROR"/"$wgetvar".rpm -O "$tmp"/"$wgetvar".rpm
   # if [[ $wgetvar ]]
   # then
   # wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
@@ -82,7 +82,7 @@ cd "$tmp/$subdir"
 
 #filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit the RPM package manager
 echo 'creating Mageia ready filesystem'
-"$tmp"/bash_rpm_cpio.sh "$tmp"/filesystem.rpm | "$tmp"/bash_cpio.sh -idmv
+"$tmp"/bash_rpm_cpio.sh "$tmp"/filesystem*.rpm | "$tmp"/bash_cpio.sh -idmv
 
 # /dev is not created by filesystem.rpm: create /dev manually
 mkdir "$tmp/$subdir"/dev
