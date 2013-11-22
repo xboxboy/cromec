@@ -91,5 +91,5 @@ mkdir "$tmp/$subdir"/dev
 
 # extraction of packages into chroot filesystem:
 echo 'Extracting packages into created file system'
-find "$tmp"/"$subdir" -type f -name *.rpm | xargs -n1 -ifile sh -c ""$tmp"/bash_rpm_cpio.sh file | "$tmp"/bash_cpio.sh -idmv"
+find "$tmp"/"$subdir" -type f -name '*.rpm' | xargs -n1 -ifile sh -c ""$tmp"/bash_rpm_cpio.sh file | "$tmp"/bash_cpio.sh -idmv"
 )
