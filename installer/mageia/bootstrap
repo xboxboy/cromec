@@ -32,7 +32,7 @@
 
 # Grab latest package listings: 
 echo 'Downloading mirror package listing: synthesis.hdlist.cz'
-wget "$MIRROR"/../media_info/synthesis.hdlist.cz -O "$tmp"/synthesis.hdlist.cz
+wget "$MIRROR"/media_info/synthesis.hdlist.cz -O "$tmp"/synthesis.hdlist.cz
 # eg: wget http://ftp.aarnet.edu.au/pub/mageia/distrib/3/x86_64/media/core/release/media_info/synthesis.hdlist.cz  -O $tmp/synthesis.hdlist.cz
 
 # Decompress package listing: 
