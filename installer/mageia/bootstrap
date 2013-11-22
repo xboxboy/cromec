@@ -50,13 +50,16 @@ newpath="$PATH:$tmp"
 cp "$INSTALLERDIR/$DISTRO/bash_rpm_cpio.sh" "$INSTALLERDIR/$DISTRO/bash_cpio.sh" "$INSTALLERDIR/$DISTRO/mageia3_rpms_req.txt" "$tmp/"
 chmod 755 "$tmp/bash_rpm_cpio.sh" "$tmp/bash_cpio.sh"
 
+# Create $subdir
+mkdir -p "$tmp"/"$subdir"
+
 # Determine packages full names including version: Then gather packages for chroot environment
 echo 'Downloading packages required for bootstrap'
 while read -r name;
 do
 #  printf 'Pattern: %q\nPackage name and version: %q\n' "$name" "$wgetvar"
   if wgetvar=$(grep -E "^$name"-[0-9] "$tmp"/mirrorrpmlist.txt); then
-  wget "$MIRROR"/"$wgetvar".rpm -O "$tmp"/"$wgetvar".rpm
+  wget "$MIRROR"/"$wgetvar".rpm -O "$tmp"/"$subdir"/"$wgetvar".rpm
   # if [[ $wgetvar ]]
   # then
   # wget "$MIRROR"/"$wgetvar".rpm -P "$tmp"
@@ -77,17 +80,16 @@ ls "$tmp"/*.rpm
 (
 # Now in sub shell
 # All scripts and packages are now in $tmp: cd into $tmp/$subdir to create chroot filesystem and extract packages via scripts
-mkdir -p "$tmp"/"$subdir"
 cd "$tmp/$subdir"
 
 #filesystem*.rpm package must be extracted first, or bootstrap filesystem will not suit the RPM package manager
 echo 'creating Mageia ready filesystem'
-"$tmp"/bash_rpm_cpio.sh "$tmp"/filesystem*.rpm | "$tmp"/bash_cpio.sh -idmv
+"$tmp"/bash_rpm_cpio.sh "$tmp"/"subdir"/filesystem*.rpm | "$tmp"/bash_cpio.sh -idmv
 
 # /dev is not created by filesystem.rpm: create /dev manually
 mkdir "$tmp/$subdir"/dev
 
 # extraction of packages into chroot filesystem:
 echo 'Extracting packages into created file system'
-find $tmp -type f -name *.rpm | xargs -n1 -ifile sh -c ""$tmp"/bash_rpm_cpio.sh file | "$tmp"/bash_cpio.sh -idmv"
+find "$tmp"/"$subdir" -type f -name *.rpm | xargs -n1 -ifile sh -c ""$tmp"/bash_rpm_cpio.sh file | "$tmp"/bash_cpio.sh -idmv"
 )
