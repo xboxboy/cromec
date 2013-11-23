@@ -76,13 +76,10 @@ mount -o bind /sys /chroottest/sys
 
 cp -fr /etc/resolv.conf /chroottest/etc/resolv.conf
 
-#enter chroot
-
-# chroot /chroottest/
-
+# Chroot is now functional: rpm should work
 # Use RPM to reinstall all rpms: Build rpm database
 
-# A: find . -type f -name "*".rpm | xargs -n1 -ifile /bin/rpm file -iv --nodeps --replacepkgs
+chroot /chroottest/ sh -ec 'find . -type f -name "*".rpm | xargs -n1 -ifile /bin/rpm file -iv --nodeps --replacepkgs'
 
 # Urpmi not working due to locale problems : May not need this following export line
 
@@ -91,5 +88,6 @@ cp -fr /etc/resolv.conf /chroottest/etc/resolv.conf
 # Add mirror list to urpmi
 
 # urpmi.addmedia --distrib --mirrorlist '$MIRRORLIST'
+# In the arm preview case: usr/sbin/urpmi.addmedia --distrib http://packages.rtp-net.org/mageia/1/armv5tl
 
-# B: urpmi.addmedia --distrib ftp://ftp.mirror.aarnet.edu.au/pub/mageia/distrib/3/x86_64
+chroot /chroottest/ sh -ec 'urpmi.addmedia --distrib ftp://ftp.mirror.aarnet.edu.au/pub/mageia/distrib/3/x86_64'
