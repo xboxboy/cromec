@@ -91,3 +91,7 @@ chroot /chroottest/ sh -ec 'find . -type f -name "*".rpm | xargs -n1 -ifile /bin
 # In the arm preview case: usr/sbin/urpmi.addmedia --distrib http://packages.rtp-net.org/mageia/1/armv5tl
 
 chroot /chroottest/ sh -ec 'urpmi.addmedia --distrib ftp://ftp.mirror.aarnet.edu.au/pub/mageia/distrib/3/x86_64'
+
+#get pub keys;
+wget http://packages.rtp-net.org/mageia/1/armv5tl/media_info/pubkey
+wget http://packages.rtp-net.org/mageia/1/armv5tl/media_info/pubkey_core_release
