@@ -6,3 +6,13 @@
 # This is a distro-specific continuation of the prepare.sh script.
 
 exit 1
+
+# Add media to urpmi
+# /usr/sbin/urpmi.addmedia --distrib http://packages.rtp-net.org/mageia/1/armv5tl
+
+# Reinstall all packages with urpmi
+# for rpm in *.rpm; do /usr/sbin/urpmi "$rpm" --allow-force --ignoresize; done
+
+# ????????????????????
+# mount command still doesn't work
+# Remount / as read write?
