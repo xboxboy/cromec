@@ -88,5 +88,5 @@ sed
 setup
 shadow-utils
 urpmi
-util-linux|util-linux-ng
+util-linux
 vim-minimal
