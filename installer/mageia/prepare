@@ -10,6 +10,8 @@
 # eg /usr/sbin/urpmi.addmedia --distrib http://packages.rtp-net.org/mageia/1/armv5tl
 /usr/sbin/urpmi.addmedia --distrib $MIRROR/../../../
 
+# ensure we are in /
+cd /
 
 # Reinstall all packages with urpmi
 for rpm in *.rpm; do /usr/sbin/urpmi "$rpm" --allow-force --ignoresize; done
@@ -17,6 +19,7 @@ for rpm in *.rpm; do /usr/sbin/urpmi "$rpm" --allow-force --ignoresize; done
 # Remove all manually downloaded rpm packages
 rm /*.rpm
 
+# ln -sf /proc/mounts /etc/mtab
 # ????????????????????
 # mount command still doesn't work
 # Remount / as read write?
