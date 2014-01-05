@@ -94,7 +94,7 @@ echo 'Extracting packages into created file system'
 find "$tmp"/"$subdir" -type f -name '*.rpm' | xargs -n1 -ifile sh -c ""$tmp"/bash_rpm_cpio.sh file | "$tmp"/bash_cpio.sh -idmv"
 
 # setup /etc/shadow file
-if [ ! -e /etc/shadow ]; then
+if [ ! -e "$tmp"/"$subdir"/etc/shadow ]; then
     sed -e 's/:.*$/:*:16058:0:99999:7:::/' "$tmp"/"$subdir"/etc/passwd > "$tmp"/"$subdir"/etc/shadow
 fi
 )
