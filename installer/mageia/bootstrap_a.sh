@@ -117,6 +117,10 @@ while [ -n "$missing" ]; do
             # Get list of dependencies (real and virtual)
             ndep="awk -F@ '$2 == "requires" { req = $0; next } /^@info@'"$urpmivar"'.*/ { $0 = req; for (i = 3; i <= NF; i++) print $i }' synthesis.hdlist"
 
+
+            #This following line tells us what rpms provide $dependency      
+#            "awk -F @ '/^@provides@/ { pro = index($0, "$dependency") } /^@info@/ && pro { print $3 }' synthesis.hdlist
+      
             
 #            ndep="`getdbfield "$REPO" "$PKGVER" "depends" "DEPENDS" \
 #                     | sed -n -e 's/^\([^<>=]*\).*$/\1/p' | tr '\n' ' '`"
