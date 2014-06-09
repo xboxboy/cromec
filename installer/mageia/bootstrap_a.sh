@@ -82,8 +82,12 @@ while [ -n "$missing" ]; do
     for PACKAGE in $missing; do
         inst='y'
 
-        # Determine what the PACKAGES rpm is called and allocate it to $urpmivar
-        urpmivar="`awk -F "@" '/@info@'"$PACKAGE"'-.[^A-Za-z]/ { print $3}' synthesis.hdlist`"
+        #This following line tells us what rpms can provide $PACKAGE      
+        rpm="awk -F@ '/^@provides@/ { pro = index($0, $PACKAGE) } /^@info@/ && pro { print $3 }' synthesis.hdlist"
+	echo "These are the rpms that provide $PACKAGE"
+        
+        # Determine what the $PACKAGE rpm is called and allocate it to $urpmivar
+        urpmivar="`awk -F "@" '/@info@'"$rpm"'-.[^A-Za-z]/ { print $3}' synthesis.hdlist`"
         echo "Required package is known as $urpmivar"
         # Required package is now known as $urpmivar
         # Do not install if already installed, or in ignore list
@@ -116,13 +120,10 @@ while [ -n "$missing" ]; do
 
             # Get list of dependencies (real and virtual) for $PACKAGE
 
-            dependency=`awk -F@ '$2 == "requires" { req = $0; next } /^@info@'"$urpmivar"'/ { $0 = req; for (i = 3; i <= NF; i++) print $i }' synthesis.hdlist`
-	    echo "These are dependencies:   $dependency"
+            ndep=`awk -F@ '$2 == "requires" { req = $0; next } /^@info@'"$urpmivar"'/ { $0 = req; for (i = 3; i <= NF; i++) print $i }' synthesis.hdlist`
+	    echo "These are the dependencies:   $ndep"
 
-            #This following line tells us what rpms can provide $dependency      
-            ndep="awk -F@ '/^@provides@/ { pro = index($0, $dependency) } /^@info@/ && pro { print $3 }' synthesis.hdlist"
-	    echo "These are the rpms that provide $dependency"
-	    echo "$ndep"
+
             
 #            ndep="`getdbfield "$REPO" "$PKGVER" "depends" "DEPENDS" \
 #                     | sed -n -e 's/^\([^<>=]*\).*$/\1/p' | tr '\n' ' '`"
