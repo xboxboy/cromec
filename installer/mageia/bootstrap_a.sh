@@ -21,7 +21,7 @@
 # to list them manually:
 # - bash provides sh
 # - gawk provides awk
-PACKAGES_BOOTSTRAP="perl urpmi"
+PACKAGES_BOOTSTRAP="perl-base urpmi"
 # Packages we do not want to install (even if they are dependencies)
 # FIXME: This is probably a bad idea
 PACKAGES_BOOTSTRAP_IGNORE=""
@@ -81,9 +81,8 @@ while [ -n "$missing" ]; do
     nextmissing=""
     for PACKAGE in $missing; do
         inst='y'
-        # Determine what the packages rpm is called and allocate it to $urpmivar
-#        urpmivar="`awk -F "@" '/info@urpmi-.[^A-Za-z]/ {print $3}' synthesis.hdlist`"
 
+        # Determine what the PACKAGES rpm is called and allocate it to $urpmivar
         urpmivar="`awk -F "@" '/@info@'"$PACKAGE"'-.[^A-Za-z]/ { print $3}' synthesis.hdlist`"
         echo "Required package is known as $urpmivar"
         # Required package is now known as $urpmivar
@@ -96,7 +95,8 @@ while [ -n "$missing" ]; do
         done
 
         if [ "$inst" = 'y' ]; then
-            echo "This is required & this is where we would download and install $PACKAGE..." 1>&2
+          echo "$PACKAGE is not installed"
+          echo "This is required & we would download and install '"$urpmivar"'" 1>&2
             
             
 #            PKG="`grep ":$PACKAGE-[0-9]" "$LIST" | head -n 1`"
@@ -114,13 +114,15 @@ while [ -n "$missing" ]; do
 #            curl $curlparams -o "$FETCHDIRPKG/$FILE" "$MIRRORBASE/$FILE" 1>&2
 #            tar --warning=no-unknown-keyword -xkf "$FETCHDIRPKG/$FILE" -C "$BOOTSTRAPCHROOT"
 
-            # Get list of dependencies (real and virtual)
-            ndep="awk -F@ '$2 == "requires" { req = $0; next } /^@info@'"$urpmivar"'.*/ { $0 = req; for (i = 3; i <= NF; i++) print $i }' synthesis.hdlist"
+            # Get list of dependencies (real and virtual) for $PACKAGE
 
+            dependency=`awk -F@ '$2 == "requires" { req = $0; next } /^@info@'"$urpmivar"'/ { $0 = req; for (i = 3; i <= NF; i++) print $i }' synthesis.hdlist`
+	    echo "These are dependencies:   $dependency"
 
-            #This following line tells us what rpms provide $dependency      
-#            "awk -F @ '/^@provides@/ { pro = index($0, "$dependency") } /^@info@/ && pro { print $3 }' synthesis.hdlist
-      
+            #This following line tells us what rpms can provide $dependency      
+            ndep="awk -F@ '/^@provides@/ { pro = index($0, $dependency) } /^@info@/ && pro { print $3 }' synthesis.hdlist"
+	    echo "These are the rpms that provide $dependency"
+	    echo "$ndep"
             
 #            ndep="`getdbfield "$REPO" "$PKGVER" "depends" "DEPENDS" \
 #                     | sed -n -e 's/^\([^<>=]*\).*$/\1/p' | tr '\n' ' '`"
